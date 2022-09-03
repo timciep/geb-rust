@@ -1,6 +1,6 @@
-struct Node<'a> {
+struct Node {
     number: i32,
-    children: Vec<&'a mut Node<'a>>
+    children: Vec<Node>
 }
 
 fn apply_g(x: i32) -> i32 {
@@ -12,22 +12,23 @@ fn apply_g(x: i32) -> i32 {
     }
 }
 
-fn find_node<'a>(node: &'a mut Node<'a>, number: i32) -> Option<&'a mut Node<'a>> {
-    if node.number == number {
-        return Some(node);
-    }
+fn add_subnode_to_number(base_node: &mut Node, number: i32) {
+    if base_node.number == number {
+        let new_node = Node {
+            number: number,
+            children: Vec::new()
+        };
 
-    for childNode in &mut node.children {
-        if let Some(matchingNode) = find_node(childNode, number) {
-            return Some(matchingNode);
+        base_node.children.push(new_node);
+    } else {
+        for child_node in &mut base_node.children {
+            add_subnode_to_number(child_node, number);
         }
     }
-
-    None
 }
 
 fn main() {
-    let mut baseNode = Node {
+    let mut base_node = Node {
         number: 0,
         children: Vec::new()
     };
@@ -39,14 +40,7 @@ fn main() {
 
         println!("{n}: {r}");
 
-        let mut node = Node {
-            number: n,
-            children: Vec::new()
-        };
-
-        if let Some(parentNode) = find_node(&mut baseNode, n) {
-            parentNode.children.push(&mut node);
-        }
+        add_subnode_to_number(&mut base_node, r);
 
         n = n + 1;
     }

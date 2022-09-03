@@ -1,3 +1,5 @@
+use ptree::{TreeBuilder, print_tree};
+
 struct Node {
     number: i32,
     children: Vec<Node>
@@ -35,7 +37,7 @@ fn main() {
 
     let mut n = 1;
     
-    while n < 10 {
+    while n < 20 {
         let r = apply_g(n);
 
         println!("{n}: {r}");
@@ -44,4 +46,18 @@ fn main() {
 
         n = n + 1;
     }
+
+    
+
+
+    // Build a tree using a TreeBuilder
+    let tree = TreeBuilder::new("tree".to_string())
+        .begin_child("branch".to_string())
+            .add_empty_child("leaf".to_string())
+        .end_child()
+        .add_empty_child("empty branch".to_string())
+        .build();
+
+    // Print out the tree using default formatting
+    print_tree(&tree).ok();
 }

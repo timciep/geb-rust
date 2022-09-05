@@ -20,3 +20,23 @@ pub fn apply_g_flip(x: i32) -> i32 {
         y
     }
 }
+
+pub fn apply_f(x: i32) -> i32 {
+    // println!("f: {x}");
+    if x == 0 {
+        1
+    } else {
+        let y = x - apply_m(apply_f(x - 1));
+        y
+    }
+}
+
+pub fn apply_m(x: i32) -> i32 {
+    // println!("m: {x}");
+    if x == 0 {
+        0
+    } else {
+        let y = x - apply_f(apply_m(x - 1));
+        y
+    }
+}

@@ -7,16 +7,19 @@ use clap::Parser;
 
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
-
 /// Simple program for printing a GEB Diagram G.
 struct Args {
-    /// Use "flipped G" ?
-    #[clap(short, long, value_parser, default_value_t=false)]
-    flip: bool,
+    /// Which rule to use? (g, g_flip, f, m)
+    #[clap(short, long, value_parser)]
+    rule: String,
 
     /// Number of iterations.
     #[clap(short, long, value_parser, default_value_t=20)]
     iterations: i32,
+
+    /// Show steps?
+    #[clap(short, long, value_parser, default_value_t=false)]
+    steps: bool,
 }
 
 struct Node {
@@ -35,9 +38,17 @@ fn main() {
     let mut n = 2;
     
     while n <= args.iterations {
-        let r = if args.flip { apply_g_flip(n) } else {apply_g(n)};
+        let r = match args.rule.as_str() {
+            "g" => apply_g(n),
+            "g_flip" => apply_g_flip(n),
+            "f" => apply_f(n),
+            "m" => apply_m(n),
+            _ => panic!("Must provide a valid --rule")
+        };
 
-        // println!("G({n}) = {r}");
+        if args.steps {
+            println!("{}({n}) = {r}", args.rule);
+        }
 
         add_subnode_to_number(&mut base_node, r, n);
 
@@ -49,11 +60,14 @@ fn main() {
 
     construct_tree_from_node(base_node, &mut tree_builder);
 
+    if args.steps {
+        println!("--------------------------------");
+    }
     print_tree(&tree_builder.build()).ok();
 }
 
 fn add_subnode_to_number(base_node: &mut Node, parent_number: i32, new_subnode_number: i32) {
-    if base_node.number == parent_number {
+    if base_node.number == parent_number || parent_number == new_subnode_number {
         let new_node = Node {
             number: new_subnode_number,
             children: Vec::new()

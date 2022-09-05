@@ -10,7 +10,7 @@ G(n) =  n - G(G(n - 1))  ~ for n > 0
 G(0) =  0
 ```
 
-## Running
+## Usage
 
 ```
 USAGE:
@@ -25,3 +25,7 @@ OPTIONS:
     -s, --steps                      Show steps?
     -V, --version                    Print version information
 ```
+
+## Example
+
+<img width="453" alt="image" src="https://user-images.githubusercontent.com/2245341/188519312-a0287663-af28-4c05-8d47-ea9618779df8.png">

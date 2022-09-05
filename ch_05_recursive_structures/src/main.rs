@@ -31,8 +31,6 @@ fn add_subnode_to_number(base_node: &mut Node, parent_number: i32, new_subnode_n
 
 fn construct_tree_from_node(base_node: Node, tree_builder: &mut TreeBuilder) -> &mut TreeBuilder {
     for child_node in base_node.children {
-        println!("child_node.number: {}", child_node.number.to_string());
-
         tree_builder.begin_child(child_node.number.to_string());
 
         construct_tree_from_node(child_node, tree_builder);
